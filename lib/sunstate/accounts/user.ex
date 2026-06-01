@@ -7,6 +7,7 @@ defmodule Sunstate.Accounts.User do
     # Basic info
     field :email, :string
     field :password, :string, virtual: true, redact: true
+    field :current_password, :string, virtual: true, redact: true
     field :hashed_password, :string, redact: true
     field :display_name, :string
     field :phone, :string
