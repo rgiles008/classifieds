@@ -46,6 +46,11 @@ defmodule SunstateWeb.Router do
       on_mount: [{SunstateWeb.UserAuth, :ensure_authenticated}] do
       live "/users/settings", UserSettingsLive, :edit
       live "/users/settings/confirm_email/:token", UserSettingsLive, :confirm_email
+
+      live "/listings/new", ListingFormLive, :new
+      live "/listings/:id/edit", ListingFormLive, :edit
+      live "/my/listings", MyListingsLive, :index
+      live "/my/favorites", MyFavoritesLive, :index
     end
   end
 
@@ -58,6 +63,9 @@ defmodule SunstateWeb.Router do
       on_mount: [{SunstateWeb.UserAuth, :mount_current_user}] do
       live "/users/confirm/:token", UserConfirmationLive, :edit
       live "/users/confirm", UserConfirmationInstructionsLive, :new
+
+      live "/listings", ListingIndexLive, :index
+      live "/listings/:id", ListingShowLive, :show
     end
   end
 

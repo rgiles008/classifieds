@@ -66,7 +66,7 @@ defmodule Sunstate.ListingsTest do
       %{user: user, category: category}
     end
 
-    test "create_listing/1 with valid data creates a listing", %{user: user, category: category} do
+    test "create_listing/2 with valid data creates a listing", %{user: user, category: category} do
       attrs = %{
         title: "iPhone 15 Pro Max",
         description: "Excellent condition, barely used iPhone 15 Pro Max.",
@@ -75,35 +75,35 @@ defmodule Sunstate.ListingsTest do
         condition: "like_new",
         zip_code: "32801",
         city: "Orlando",
-        user_id: user.id,
         category_id: category.id
       }
 
-      assert {:ok, %Listing{} = listing} = Listings.create_listing(attrs)
+      assert {:ok, %Listing{} = listing} = Listings.create_listing(user, attrs)
       assert listing.title == "iPhone 15 Pro Max"
       assert listing.status == "active"
       assert listing.view_count == 0
+      assert listing.user_id == user.id
     end
 
-    test "create_listing/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = Listings.create_listing(%{})
+    test "create_listing/2 with invalid data returns error changeset", %{user: user} do
+      assert {:error, %Ecto.Changeset{}} = Listings.create_listing(user, %{})
     end
 
-    test "create_listing/1 validates title length" do
+    test "create_listing/2 validates title length", %{user: user} do
       attrs = valid_listing_attributes(%{title: "Hey"})
-      assert {:error, changeset} = Listings.create_listing(attrs)
+      assert {:error, changeset} = Listings.create_listing(user, attrs)
       assert %{title: ["should be at least 5 character(s)"]} = errors_on(changeset)
     end
 
-    test "create_listing/1 validates zip code format" do
+    test "create_listing/2 validates zip code format", %{user: user} do
       attrs = valid_listing_attributes(%{zip_code: "abc"})
-      assert {:error, changeset} = Listings.create_listing(attrs)
+      assert {:error, changeset} = Listings.create_listing(user, attrs)
       assert %{zip_code: ["must be a 5-digit zip code"]} = errors_on(changeset)
     end
 
-    test "create_listing/1 validates price_type inclusion" do
+    test "create_listing/2 validates price_type inclusion", %{user: user} do
       attrs = valid_listing_attributes(%{price_type: "barter"})
-      assert {:error, changeset} = Listings.create_listing(attrs)
+      assert {:error, changeset} = Listings.create_listing(user, attrs)
       assert %{price_type: [_]} = errors_on(changeset)
     end
 

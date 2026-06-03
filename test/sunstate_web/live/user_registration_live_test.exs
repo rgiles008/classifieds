@@ -1,0 +1,68 @@
+defmodule SunstateWeb.UserRegistrationLiveTest do
+  use SunstateWeb.ConnCase, async: true
+
+  import Phoenix.LiveViewTest
+  import Sunstate.AccountsFixtures
+
+  describe "Registration page" do
+    test "renders registration page", %{conn: conn} do
+      {:ok, _lv, html} = live(conn, ~p"/users/register")
+      assert html =~ "Create an Account"
+      assert html =~ "Log in"
+    end
+
+    test "redirects if already logged in", %{conn: conn} do
+      result =
+        conn
+        |> log_in_user(user_fixture())
+        |> live(~p"/users/register")
+        |> follow_redirect(conn)
+
+      assert {:ok, _conn} = result
+    end
+
+    test "renders errors for invalid data", %{conn: conn} do
+      {:ok, lv, _html} = live(conn, ~p"/users/register")
+
+      result =
+        lv
+        |> element("#registration_form")
+        |> render_change(user: %{"email" => "with spaces", "password" => "short"})
+
+      assert result =~ "must have the @ sign and no spaces"
+      assert result =~ "should be at least 12 character"
+    end
+  end
+
+  describe "register user" do
+    test "creates account and logs the user in", %{conn: conn} do
+      {:ok, lv, _html} = live(conn, ~p"/users/register")
+
+      email = unique_user_email()
+
+      form =
+        form(lv, "#registration_form",
+          user: %{email: email, password: valid_user_password()}
+        )
+
+      render_submit(form)
+      conn = follow_trigger_action(form, conn)
+
+      assert redirected_to(conn) == ~p"/"
+    end
+
+    test "renders errors for duplicated email", %{conn: conn} do
+      user = user_fixture(%{email: "test@email.com"})
+      {:ok, lv, _html} = live(conn, ~p"/users/register")
+
+      result =
+        lv
+        |> form("#registration_form",
+          user: %{"email" => user.email, "password" => "valid_password123"}
+        )
+        |> render_submit()
+
+      assert result =~ "has already been taken"
+    end
+  end
+end

@@ -26,6 +26,7 @@ defmodule SunstateWeb.Layouts do
 
   """
   attr :flash, :map, required: true, doc: "the map of flash messages"
+  attr :current_user, :map, default: nil, doc: "the current user"
 
   attr :current_scope, :map,
     default: nil,
@@ -50,11 +51,40 @@ defmodule SunstateWeb.Layouts do
           <li>
             <a href="/listings" class="btn btn-ghost">Browse</a>
           </li>
-          <li>
-            <a href="/users/log_in" class="btn btn-primary">
-              Sign In
-            </a>
-          </li>
+          <%= if @current_user do %>
+            <li>
+              <a href="/listings/new" class="btn btn-ghost">
+                <.icon name="hero-plus" class="size-4" /> Post
+              </a>
+            </li>
+            <li>
+              <a href="/my/favorites" class="btn btn-ghost">
+                <.icon name="hero-heart" class="size-4" />
+              </a>
+            </li>
+            <li class="dropdown dropdown-end">
+              <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar placeholder">
+                <div class="bg-neutral text-neutral-content w-8 rounded-full">
+                  <span class="text-xs">
+                    {String.first(@current_user.display_name || @current_user.email) |> String.upcase()}
+                  </span>
+                </div>
+              </div>
+              <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-10 w-52 p-2 shadow">
+                <li><a href="/my/listings">My Listings</a></li>
+                <li><a href="/users/settings">Settings</a></li>
+                <li>
+                  <.link href="/users/log_out" method="delete">Log out</.link>
+                </li>
+              </ul>
+            </li>
+          <% else %>
+            <li>
+              <a href="/users/log_in" class="btn btn-primary">
+                Sign In
+              </a>
+            </li>
+          <% end %>
         </ul>
       </div>
     </header>

@@ -42,7 +42,7 @@ defmodule Sunstate.Listings.Listing do
     |> cast(attrs, [
       :title, :description, :price, :price_type, :condition, :status,
       :zip_code, :city, :state, :latitude, :longitude,
-      :expires_at, :featured_until, :user_id, :category_id
+      :expires_at, :featured_until, :category_id
     ])
     |> validate_required([:title, :description, :price_type, :zip_code, :user_id])
     |> validate_length(:title, min: 5, max: 200)

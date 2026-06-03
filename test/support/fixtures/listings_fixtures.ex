@@ -25,7 +25,6 @@ defmodule Sunstate.ListingsFixtures do
   end
 
   def valid_listing_attributes(attrs \\ %{}) do
-    user = attrs[:user] || AccountsFixtures.user_fixture()
     category = attrs[:category] || category_fixture()
 
     attrs
@@ -39,16 +38,18 @@ defmodule Sunstate.ListingsFixtures do
       zip_code: "32801",
       city: "Orlando",
       state: "FL",
-      user_id: user.id,
       category_id: category.id
     })
   end
 
   def listing_fixture(attrs \\ %{}) do
+    user = attrs[:user] || AccountsFixtures.user_fixture()
+
     {:ok, listing} =
-      attrs
-      |> valid_listing_attributes()
-      |> Sunstate.Listings.create_listing()
+      Sunstate.Listings.create_listing(
+        user,
+        valid_listing_attributes(attrs)
+      )
 
     listing
   end

@@ -90,8 +90,8 @@ defmodule Sunstate.Listings do
     |> Repo.get!(id)
   end
 
-  def create_listing(attrs) do
-    %Listing{}
+  def create_listing(%Sunstate.Accounts.User{} = user, attrs) do
+    %Listing{user_id: user.id}
     |> Listing.changeset(attrs)
     |> Repo.insert()
   end
