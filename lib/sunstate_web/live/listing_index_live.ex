@@ -162,9 +162,8 @@ defmodule SunstateWeb.ListingIndexLive do
   end
 
   defp primary_image(listing) do
-    case listing.images do
-      [%{variants: %{"thumbnail" => url}} | _] -> url
-      [%{storage_key: key} | _] -> key
+    case Enum.find(listing.images, & &1.is_primary) || List.first(listing.images) do
+      %{storage_key: key} -> "/uploads/#{key}"
       _ -> nil
     end
   end

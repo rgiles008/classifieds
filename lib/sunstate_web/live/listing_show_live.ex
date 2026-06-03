@@ -35,7 +35,7 @@ defmodule SunstateWeb.ListingShowLive do
                 class="w-20 h-20 flex-shrink-0 bg-base-200 rounded overflow-hidden cursor-pointer"
               >
                 <img
-                  src={image.storage_key}
+                  src={~p"/uploads/#{image.storage_key}"}
                   alt="Thumbnail"
                   class="w-full h-full object-cover"
                 />
@@ -105,7 +105,7 @@ defmodule SunstateWeb.ListingShowLive do
                 data-confirm="Mark this listing as sold?">
                 <.icon name="hero-check-circle" class="size-4" /> Mark as Sold
               </button>
-              <button :if={!@is_owner && @current_user} class="btn btn-primary flex-1">
+              <button :if={!@is_owner && @current_user} phx-click="contact_seller" class="btn btn-primary flex-1">
                 <.icon name="hero-chat-bubble-left-right" class="size-4" /> Contact Seller
               </button>
               <.link :if={!@current_user} navigate={~p"/users/log_in"} class="btn btn-primary flex-1">
@@ -146,8 +146,8 @@ defmodule SunstateWeb.ListingShowLive do
       end
 
     primary_image =
-      case listing.images do
-        [%{storage_key: key} | _] -> key
+      case Enum.find(listing.images, & &1.is_primary) || List.first(listing.images) do
+        %{storage_key: key} -> "/uploads/#{key}"
         _ -> nil
       end
 
@@ -176,6 +176,19 @@ defmodule SunstateWeb.ListingShowLive do
 
       _ ->
         {:noreply, put_flash(socket, :error, "Something went wrong")}
+    end
+  end
+
+  def handle_event("contact_seller", _params, socket) do
+    listing = socket.assigns.listing
+    user = socket.assigns.current_user
+
+    case Sunstate.Messaging.get_or_create_conversation(listing, user) do
+      {:ok, conversation} ->
+        {:noreply, push_navigate(socket, to: ~p"/conversations/#{conversation.id}")}
+
+      {:error, _} ->
+        {:noreply, put_flash(socket, :error, "Could not start conversation")}
     end
   end
 

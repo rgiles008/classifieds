@@ -62,6 +62,11 @@ defmodule SunstateWeb.Layouts do
                 <.icon name="hero-heart" class="size-4" />
               </a>
             </li>
+            <li>
+              <a href="/inbox" class="btn btn-ghost">
+                <.icon name="hero-chat-bubble-left-right" class="size-4" />
+              </a>
+            </li>
             <li class="dropdown dropdown-end">
               <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar placeholder">
                 <div class="bg-neutral text-neutral-content w-8 rounded-full">

@@ -51,6 +51,8 @@ defmodule SunstateWeb.Router do
       live "/listings/:id/edit", ListingFormLive, :edit
       live "/my/listings", MyListingsLive, :index
       live "/my/favorites", MyFavoritesLive, :index
+      live "/inbox", InboxLive, :index
+      live "/conversations/:id", ConversationLive, :show
     end
   end
 
