@@ -5,7 +5,8 @@ defmodule SunstateWeb.UserSettingsLive do
 
   def render(assigns) do
     ~H"""
-    <.header class="text-center">
+    <Layouts.app flash={@flash} current_user={@current_user}>
+      <.header class="text-center">
       Account Settings
       <:subtitle>Manage your account email address and password settings</:subtitle>
     </.header>
@@ -69,7 +70,8 @@ defmodule SunstateWeb.UserSettingsLive do
           </:actions>
         </.simple_form>
       </div>
-    </div>
+      </div>
+    </Layouts.app>
     """
   end
 

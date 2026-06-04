@@ -12,8 +12,7 @@ defmodule Sunstate.Application do
       Sunstate.Repo,
       {DNSCluster, query: Application.get_env(:sunstate, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: Sunstate.PubSub},
-      # Start a worker by calling: Sunstate.Worker.start_link(arg)
-      # {Sunstate.Worker, arg},
+      {Cachex, name: :sunstate_rate_limit},
       # Start to serve requests, typically the last entry
       SunstateWeb.Endpoint
     ]

@@ -5,7 +5,8 @@ defmodule SunstateWeb.UserResetPasswordLive do
 
   def render(assigns) do
     ~H"""
-    <div class="mx-auto max-w-sm">
+    <Layouts.app flash={@flash} current_user={@current_user}>
+      <div class="mx-auto max-w-sm">
       <.header class="text-center">Reset Password</.header>
 
       <.simple_form
@@ -34,7 +35,8 @@ defmodule SunstateWeb.UserResetPasswordLive do
         <.link href={~p"/users/register"}>Register</.link>
         | <.link href={~p"/users/log_in"}>Log in</.link>
       </p>
-    </div>
+      </div>
+    </Layouts.app>
     """
   end
 

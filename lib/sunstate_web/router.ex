@@ -10,11 +10,16 @@ defmodule SunstateWeb.Router do
     plug :put_root_layout, html: {SunstateWeb.Layouts, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
+    plug SunstateWeb.Plugs.SecurityHeaders
     plug :fetch_current_user
   end
 
   pipeline :api do
     plug :accepts, ["json"]
+  end
+
+  pipeline :rate_limited do
+    plug SunstateWeb.Plugs.RateLimit, max_requests: 10, window_ms: 60_000
   end
 
   scope "/", SunstateWeb do
@@ -35,6 +40,10 @@ defmodule SunstateWeb.Router do
       live "/users/reset_password", UserForgotPasswordLive, :new
       live "/users/reset_password/:token", UserResetPasswordLive, :edit
     end
+  end
+
+  scope "/", SunstateWeb do
+    pipe_through [:browser, :redirect_if_user_is_authenticated, :rate_limited]
 
     post "/users/log_in", UserSessionController, :create
   end

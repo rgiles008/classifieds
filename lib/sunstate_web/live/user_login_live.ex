@@ -3,7 +3,8 @@ defmodule SunstateWeb.UserLoginLive do
 
   def render(assigns) do
     ~H"""
-    <div class="mx-auto max-w-sm">
+    <Layouts.app flash={@flash} current_user={@current_user}>
+      <div class="mx-auto max-w-sm">
       <.header class="text-center">
         Log in to your account
         <:subtitle>
@@ -31,7 +32,8 @@ defmodule SunstateWeb.UserLoginLive do
           </.button>
         </:actions>
       </.simple_form>
-    </div>
+      </div>
+    </Layouts.app>
     """
   end
 

@@ -1,0 +1,34 @@
+# Ignore all directories/files that shouldn't be included in the Docker build
+.git
+.gitignore
+.dockerignore
+Dockerfile
+
+# Elixir/Phoenix
+_build
+deps
+.elixir_ls
+*.ez
+
+# Node
+node_modules
+
+# Generated on crash
+erl_crash.dump
+
+# Static artifacts
+/priv/static/assets/
+
+# Test
+/test
+/cover
+
+# Dev
+.env
+*.secret.exs
+
+# Editor
+.vscode
+.idea
+*.swp
+*~

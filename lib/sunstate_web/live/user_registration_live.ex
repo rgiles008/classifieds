@@ -6,6 +6,7 @@ defmodule SunstateWeb.UserRegistrationLive do
 
   def render(assigns) do
     ~H"""
+    <Layouts.app flash={@flash} current_user={@current_user}>
     <div class="mx-auto max-w-sm">
       <.header class="text-center">
         Create an Account
@@ -42,6 +43,7 @@ defmodule SunstateWeb.UserRegistrationLive do
         </:actions>
       </.simple_form>
     </div>
+    </Layouts.app>
     """
   end
 
